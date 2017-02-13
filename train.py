@@ -15,14 +15,14 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
-
+from math import sqrt,pow
 
 class C:
     LABEL, TS, TRAJ, X, Y, Z = tuple(range(0, 6))
 
 print "Loading data..."
 
-#data = parse.parse_data("data/subtrain.csv")
+# data = parse.parse_data("data/subtrain.csv")
 data = parse.parse_data("data/train.csv")
 
 
@@ -30,10 +30,11 @@ print "Data loaded!"
 
 
 def get_model():
-    #model = xg.XGBClassifier(silent=False,max_depth=6)
-    model = SVC(verbose=True)
+    model = xg.XGBClassifier(silent=False)
+    #model = SVC(verbose=True)
     # model = RandomForestClassifier(n_estimators=100, max_depth=10)
     return model
+
 
 
 def train(data):
@@ -47,8 +48,9 @@ def train(data):
         trajs[sample[C.TRAJ]][1].append(sample)
     x, y = [], []
     for traj in trajs.itervalues():
-        x.append(extract.traj2features(traj[1]))
-        y.append(traj[0])
+        if len(traj[1])>1:
+            x.append(extract.traj2features(traj[1]))
+            y.append(traj[0])
 
     x=np.array(x)
     y=np.array(y)

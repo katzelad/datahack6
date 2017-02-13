@@ -1,7 +1,14 @@
-import sklearn as sk, numpy as np, scipy as sp, dateutil.parser, time
+import sklearn as sk, numpy as np
+import datetime
 
 def str2ts(str):
-    return time.mktime(dateutil.parser.parse(str).timetuple())
+    try:
+        dt = datetime.datetime.strptime(str, '%Y-%m-%d %H:%M:%S.%f')
+    except:
+        dt=datetime.datetime.strptime(str, '%Y-%m-%d %H:%M:%S')
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    return (dt - epoch).total_seconds()
+
 
 def parse_row(row):
     row[1] = str2ts(row[1])
