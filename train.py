@@ -35,7 +35,7 @@ def train(data):
 
 #     model = xg.XGBClassifier()
 #     model = svm.SVC(kernel='rbf', max_iter=1000)
-    model = RandomForestClassifier(n_estimators=100, max_depth=10)
+    model = RandomForestClassifier(n_estimators=200, max_depth=12)
     model.fit(x_train, y_train)
 
     pred = model.predict(x_test)
