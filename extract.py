@@ -14,18 +14,19 @@ def append_stats(traj_features, features):
 def traj2features(samples):
     np_samples = np.array(samples)
     features = []
-    
+
     timestamps = np_samples[:, C.TS]
     xs = np_samples[:, C.X]
     ys = np_samples[:, C.Y]
     zs = np_samples[:, C.Z]
-    
+
     append_stats(timestamps, features)
     features.append(timestamps[len(timestamps) - 1] - timestamps[0])
     features.append(len(timestamps))
     append_stats(xs, features)
     append_stats(ys, features)
     append_stats(zs, features)
-    
+
 #     features.append(...)
+    features.append(count_feature[int(samples[0][C.TRAJ])])
     return features
