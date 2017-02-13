@@ -9,6 +9,7 @@ def append_stats(traj_features, features):
     features.append(np.median(traj_features))
     features.append(np.mean(traj_features))
     features.append(np.std(traj_features))
+    features.append(traj_features[len(traj_features)-1]-traj_features[0])
 
 def traj2features(samples):
     np_samples = np.array(samples)
