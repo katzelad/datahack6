@@ -12,7 +12,9 @@ import matplotlib.pyplot as plt
 
 class C:
     LABEL, TS, TRAJ, X, Y, Z = tuple(range(0, 6))
+
 print "Loading data..."
+
 data = parse.parse_data("data/subtrain.csv")
 
 print "Data loaded!"
