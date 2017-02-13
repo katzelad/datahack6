@@ -6,7 +6,8 @@ class T:
 
 class C:
     LABEL, TS, TRAJ, X, Y, Z = tuple(range(0, 6))
-    
+
+count_feature = []
 def append_stats(traj_features, features):
     features.append(np.min(traj_features))
     features.append(np.max(traj_features))
@@ -68,5 +69,4 @@ def avg_speed(samples,mode):
                     sum = sum + speed
                     prev = curr
     return (sum / (len(samples) - 1))
-
 
