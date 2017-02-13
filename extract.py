@@ -17,20 +17,20 @@ def traj2features(samples):
     features.append(np.median(timestamps))
     features.append(np.mean(timestamps))
     
-    features.append(xs.min(timestamps))
-    features.append(xs.max(timestamps))
-    features.append(xs.median(timestamps))
-    features.append(xs.mean(timestamps))
+    features.append(np.min(xs))
+    features.append(np.max(xs))
+    features.append(np.median(xs))
+    features.append(np.mean(xs))
     
-    features.append(ys.min(timestamps))
-    features.append(ys.max(timestamps))
-    features.append(ys.median(timestamps))
-    features.append(ys.mean(timestamps))
+    features.append(np.min(ys))
+    features.append(np.max(ys))
+    features.append(np.median(ys))
+    features.append(np.mean(ys))
     
-    features.append(zs.min(timestamps))
-    features.append(zs.max(timestamps))
-    features.append(zs.median(timestamps))
-    features.append(zs.mean(timestamps))
+    features.append(np.min(zs))
+    features.append(np.max(zs))
+    features.append(np.median(zs))
+    features.append(np.mean(zs))
     
 #     features.append(...)
     return features
