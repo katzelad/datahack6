@@ -11,7 +11,10 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
+from math import sqrt,pow
 
+class T:
+    TS,TRAJ,X,Y,Z=tuple(range(0,5))
 
 class C:
     LABEL, TS, TRAJ, X, Y, Z = tuple(range(0, 6))
@@ -20,15 +23,17 @@ class C:
 print "Loading data..."
 
 # data = parse.parse_data("data/subtrain.csv")
-data = parse.parse_data(r"C:\Users\Nofar\Desktop\hack\train.csv")
+# data = parse.parse_data("data/train.csv")
+test_data=parse.parse_test("data/test.csv")
 
 print "Data loaded!"
 
 
 def get_model():
-    # model = xg.XGBClassifier(silent=False,max_depth=6)
-    # model = SVC(verbose=True)
-    model = RandomForestClassifier(n_estimators=100, max_depth=10)
+
+    model = xg.XGBClassifier(silent=False,max_depth=6)
+    #model = SVC(verbose=True)
+    # model = RandomForestClassifier(n_estimators=100, max_depth=10)
     return model
 
 def calc_path():
@@ -83,8 +88,9 @@ def train(data):
     print len(trajs)
     print len(extract.count_feature)
     for traj in trajs.itervalues():
-        x.append(extract.traj2features(traj[1]))
-        y.append(traj[0])
+        if len(traj[1])>1:
+            x.append(extract.traj2features(traj[1]))
+            y.append(traj[0])
 
     x = np.array(x)
     y = np.array(y)
@@ -93,6 +99,9 @@ def train(data):
 
     model = get_model()
     model.fit(X_train, y_train)
+    with open('model.pkl','wb') as f:
+        import cPickle
+        cPickle.dump(model,f)
 
     pred = model.predict(X_test)
 
@@ -106,4 +115,36 @@ def train(data):
     print 'score:', min(accuracy)
 
 
-train(data)
+
+def predict(data):
+    with open('model.pkl','rb') as f:
+        import cPickle
+        model=cPickle.load(f)
+
+        trajs = {}
+        for sample in data:
+            if sample[T.TRAJ] not in trajs:
+                trajs[sample[T.TRAJ]] = (sample[T.TRAJ], [])
+            trajs[sample[T.TRAJ]][1].append(sample)
+        x=[]
+        keys=[]
+        for traj in trajs.itervalues():
+            if len(traj[1])>1:
+                x.append(extract.traj2features(traj[1],mode='test'))
+                keys.append(traj[0])
+
+        x=np.array(x)
+        pred=model.predict(x)
+        predictions = map(round, pred)
+        predictions=np.array(predictions)
+
+        trajs_keys=np.array(keys)
+
+        good=np.column_stack((predictions,trajs_keys))
+
+
+        np.savetxt("5806074.csv", good,header="label,trajectory_ind", delimiter=",")
+
+
+# train(data)
+predict(test_data)
